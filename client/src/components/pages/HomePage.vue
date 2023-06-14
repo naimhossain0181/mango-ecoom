@@ -1,15 +1,12 @@
 <template>
-<NavBar />
 
 <RouterView>
     <div class="">
-        <h1> Welcome to home page</h1>
         <div class="card-body">
             <div @click="productOnclick(product._id)" v-for="product in products" :key="product._id" class="card">
                 <div class="imgArea">
                     <img :src="product.image" alt="">
                 </div>
-
                 <h1>{{ product.title }}</h1>
                 <h6>{{ product.description }}</h6>
                 <h3>Tk. {{ product.price }} /Kg</h3>

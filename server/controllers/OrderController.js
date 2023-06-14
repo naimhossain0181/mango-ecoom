@@ -62,7 +62,7 @@ const OrderController = {
     /* get user's orders */
     async get_order(req, res) {
         try {
-            const orders = await Order.findOne({ userId: req.params.userId });
+            const orders = await Order.find({ userId: req.headers.id }).populate('products.productId');
             if (!orders) {
                 res.status(404).json({
                     type: "error",
@@ -85,7 +85,12 @@ const OrderController = {
 
     /* add order */
     async create_order(req, res) {
-        const newOrder = new Order(req.body);
+        const userId=req.user.id
+        const bodyData={
+            userId,
+            ...req.body
+        }
+        const newOrder = new Order(bodyData);
         try {
             const savedOrder = await newOrder.save();
             res.status(201).json({

@@ -22,16 +22,17 @@ const CartController = {
     /* get user cart */
     async get_cart(req, res) {
         try {
-            const cart = await Cart.findOne({ userId: req.params.userId});
+            const cart = await Cart.findOne({ userId: req.headers.id});
             if (!cart) {
                 res.status(404).json({
                     type: "error",
                     message: "User doesn't exists"
                 })
             } else {
+                let addtocard= await Cart.find({userId:req.headers.id}).populate('products.productId')
                 res.status(200).json({
                     type: "success",
-                    cart
+                    addtocard
                 })
             }
         } catch (err) {
@@ -45,7 +46,12 @@ const CartController = {
 
     /* add product to cart */
     async create_cart(req, res) {
-        const newCart = new Cart(req.body);
+        const userId=req.user.id
+        let bodyData={
+            userId:userId,
+            ...req.body
+        }
+        const newCart = new Cart(bodyData);
         try {
             const savedCart = await newCart.save();
             res.status(201).json({
@@ -87,7 +93,7 @@ const CartController = {
     /* delete cart */
     async delete_cart(req, res) {
         try {
-            await Cart.findOneAndDelete(req.params.id);
+            await Cart.findOneAndRemove(req.params.id);
             res.status(200).json({
                 type: "success",
                 message: "Product has been deleted successfully"

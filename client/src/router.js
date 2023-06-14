@@ -7,6 +7,10 @@ import ProductAdd from './components/AdminPanel/ProductAdd.vue'
 import ProductUpdate from './components/AdminPanel/ProductUpdate.vue'
 import ProductUpdateForm from './components/AdminPanel/ProductUpdateForm.vue'
 import ProductDelete from './components/AdminPanel/ProductDelete.vue'
+import MyCard from './components/pages/MyCard.vue'
+import Order from './components/pages/PlaceOrder.vue'
+import MyOrder from './components/pages/MyOrders.vue'
+import SignUp from './components/AdminPanel/SignUp.vue'
 
 const routes = [
   {
@@ -19,12 +23,32 @@ const routes = [
     path: "/product/:id",
     component: ProductDetails,
   },
+  {
+    name: "MyCard",
+    path: "/cart",
+    component: MyCard,
+  },
+  {
+    name: "PlaceOrder",
+    path: "/order",
+    component: Order,
+  },
+  {
+    name: "Order",
+    path: "/order/myorders",
+    component: MyOrder,
+  },
 
   // admin deshboard
   {
     name: "AdminLogin",
-    path: "/admin",
+    path: "/login",
     component: AdminLogin,
+  },
+  {
+    name: "Signup",
+    path: "/Signup",
+    component: SignUp,
   },
   {
     name: "Deshboard",

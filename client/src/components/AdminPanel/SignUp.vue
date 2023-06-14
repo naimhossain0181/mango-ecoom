@@ -4,7 +4,12 @@
     <form>
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label">Username</label>
-            <input type="email" class="form-control" v-model="username" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <input type="username" class="form-control" v-model="username" id="exampleInputEmail1" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your username with anyone else.</div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email</label>
+            <input type="email" class="form-control" v-model="email" id="exampleInputEmail1" aria-describedby="emailHelp">
             <div id="emailHelp" class="form-text">We'll never share your username with anyone else.</div>
         </div>
         <div class="mb-3">
@@ -14,27 +19,25 @@
         <div class="mb-3 form-check">
             <p>{{ msg }}</p>
         </div>
-        <button @click="submit()" type="button" class="btn btn-primary">Login</button>
-       <RouterLink to="/signup">
-        <button type="button" class="btn btn-primary signup">SignUp</button>
-       </RouterLink> 
+        <button @click="submit()" type="button" class="btn btn-primary">Submit</button>
     </form>
 </div>
 </template>
 
+    
 <script>
-
 import axios from 'axios'
-import NavBar from './SignUp.vue'
+import NavBar from '../NavBar.vue'
 export default {
 
-    name: "Login",
+    name: "Signup",
     components: {
         NavBar
     },
     data() {
         return {
             username: "",
+            email: "",
             password: "",
             msg: ""
         }
@@ -42,24 +45,14 @@ export default {
     methods: {
         async submit() {
             try {
-                const result = await axios.post("http://localhost:3000/api/v1/auth/login", {
+                const result = await axios.post("http://localhost:3000/api/v1/auth/register", {
                     username: this.username,
+                    email: this.email,
                     password: this.password
-
                 })
-                if (result.data.isAdmin) {
-                    localStorage.setItem("admin", JSON.stringify(result.data.accessToken))
-                    this.$router.go({
-                        name: "Deshboard"
-                    })
-                } else if (result.data.isAdmin === false) {
-                    localStorage.setItem("user", JSON.stringify(result.data.accessToken))
-                    localStorage.setItem("id", JSON.stringify(result.data._id))
-                    this.$router.go({
-                        name: "Home"
-                    })
-                } else {
-                    this.msg = "Your are not access this website contact your admin"
+                if(result){
+                    this.msg="signup"
+                    this.$router.push("/login")
                 }
             } catch (error) {
                 this.msg = "Your are not access this website. please contact your admin"
@@ -83,9 +76,3 @@ export default {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.signup{
-    margin-left: 10px;
-}
-</style>

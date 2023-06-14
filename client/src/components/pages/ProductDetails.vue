@@ -1,5 +1,4 @@
 <template>
-<NavBar></NavBar>
 <div class="container">
     <div>
         <h1>Product Details</h1>
@@ -18,6 +17,10 @@
 
             </div>
         </div>
+        <button @click="decreament">--</button>
+        <input type="number" placeholder="quantity" v-model="products.quantity">
+        <button @click=" increse">++</button>
+        <button @click="addToCard">Add to cart</button>
     </div>
 </div>
 </template>
@@ -32,13 +35,47 @@ export default {
     },
     data() {
         return {
-            product: ""
+            product: "",
+            products: {
+                productId: "",
+                quantity: "1"
+            }
         }
     },
+
+
+
     async mounted() {
         const id = this.$route.params.id
         const data = await axios.get("http://localhost:3000/api/v1/products/" + id)
         this.product = data.data.product
+        this.products.productId = data.data.product._id
+    },
+    methods: {
+        // add to carts api 
+        async addToCard() {
+            const token = JSON.parse(localStorage.getItem('user'))
+            console.log(token)
+            console.log(this.products)
+            const createCart = await axios.post("http://localhost:3000/api/v1/carts", {
+                products: this.products
+            }, {
+                headers: {
+                    token: token
+                }
+            })
+        },
+
+        // product quantity increamnet decreamnet
+        increse(){
+            this.products.quantity++
+        },
+        decreament(){
+            if(this.products.quantity>1){
+
+                this.products.quantity--
+            }
+        }
     },
 }
 </script>
